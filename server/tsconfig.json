@@ -10,7 +10,8 @@
     "strict": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "types": ["@types/jest"]
   },
   "include": ["./src/**/*.ts"],
   "exclude": ["node_modules", "./src/**/*.test.ts"]

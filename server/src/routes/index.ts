@@ -1,7 +1,6 @@
 import { IUser } from "./../interfaces/user";
 import { UserRepository } from "./../repositories/user.query";
 import express, { Request, Response } from "express";
-import pool from "../db/connection";
 
 const router = express.Router();
 
