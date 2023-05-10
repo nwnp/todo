@@ -50,6 +50,8 @@ export class UserController {
       });
     }
 
+    // TODO: isUse, isDel checking
+
     res.status(200).json({
       result: 1,
       message: "Login Success",
