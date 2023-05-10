@@ -1,7 +1,8 @@
 import express from "express";
 import morgan from "morgan";
-import indexRouter from "./routes/index";
 import dotenv from "dotenv";
+import indexRouter from "./routes/index";
+import userRouter from "./routes/user.router";
 dotenv.config();
 
 const app = express();
@@ -20,6 +21,7 @@ process.env.NODE_ENV == "production"
   : app.use(morgan("dev"));
 
 app.use("/", indexRouter);
+app.use("/user", userRouter);
 
 app.listen(PORT, () => {
   console.log(`The server is running at ${HOST}:${PORT}`);
