@@ -3,6 +3,7 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import indexRouter from "./routes/index";
 import userRouter from "./routes/user.router";
+
 dotenv.config();
 
 const app = express();

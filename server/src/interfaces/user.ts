@@ -1,5 +1,10 @@
+import { RowDataPacket } from "mysql2";
+
 export interface IUserResult {
-  userId: string;
-  password: string;
+  user: RowDataPacket[];
+  result: number;
+}
+
+export interface IResult {
   result: number;
 }

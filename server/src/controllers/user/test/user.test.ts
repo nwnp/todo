@@ -1,7 +1,7 @@
+import { UserController } from "./../user.controllers";
 import { describe, it, expect } from "@jest/globals";
 import { NextFunction } from "express";
 import { faker } from "@faker-js/faker";
-import { UserController } from "../user.controllers";
 import httpMocks from "node-mocks-http";
 
 describe("User Controller", () => {
@@ -77,6 +77,27 @@ describe("User Controller", () => {
     expect(res._getJSONData()).toStrictEqual({
       result: 0,
       message: "Id or Password is Too Short",
+    });
+  });
+
+  it("returns 404 when not founded user", async () => {
+    const userId = faker.internet.userName();
+    const password = faker.random.alphaNumeric(10);
+    const res = httpMocks.createResponse();
+    const req = httpMocks.createRequest({
+      body: {
+        userId,
+        password,
+      },
+    });
+
+    await userController.login(req, res);
+    userRepository.getUserById = jest.fn().mockReturnValue(false);
+
+    expect(res.statusCode).toBe(404);
+    expect(res._getJSONData()).toStrictEqual({
+      result: 0,
+      message: "Not Founded User",
     });
   });
 });

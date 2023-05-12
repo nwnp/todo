@@ -1,26 +1,28 @@
 import { RowDataPacket } from "mysql2";
 import pool from "../db/connection";
+import { IResult, IUserResult } from "../interfaces/user";
 
 export class UserRepository {
   constructor() {}
 
-  async getUserById(userId: number): Promise<any> {
+  async getUserById(userId: number): Promise<IUserResult | any> {
     const connection = await pool.getConnection();
     try {
       const sql = `
         select
           u_idx idx,
+          user_id userId,
           nickname,
           email,
           password,
           is_use isUse,
           is_del isDel
         from user 
-          where u_idx = ?`;
+          where user_id = ?`;
       const [user] = await connection.execute<RowDataPacket[]>(sql, [userId]);
       return {
         result: 1,
-        user: user[0],
+        user,
       };
     } catch (error) {
       console.log(error);

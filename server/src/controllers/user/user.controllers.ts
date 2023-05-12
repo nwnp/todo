@@ -1,14 +1,16 @@
 import { Request, Response } from "express";
-import { UserRepository } from "./../../repositories/user.query";
 import { IUserResult } from "../../interfaces/user";
+import { UserRepository } from "../../repositories/user.repository";
 import bcrypt from "bcrypt";
 
 export class UserController {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UserRepository) {
+    this.userRepository = userRepository;
+  }
 
-  async getUser(userId: number) {}
+  getUser = async (userIdx: number) => {};
 
-  async login(req: Request, res: Response) {
+  login = async (req: Request, res: Response) => {
     const { userId, password } = req.body;
     const sqlInjectionRegex = /[\s'";\\]/;
 
@@ -34,15 +36,15 @@ export class UserController {
       });
     }
 
-    const user: IUserResult = await this.userRepository.getUserById(userId);
-    if (!user.result) {
+    const isExist: IUserResult = await this.userRepository.getUserById(userId);
+    if (!isExist.user.length) {
       return res.status(404).json({
         result: 0,
         message: "Not Founded User",
       });
     }
 
-    const isMatch = bcrypt.compareSync(password, user.password);
+    const isMatch = bcrypt.compareSync(password, isExist.user[0].password);
     if (!isMatch) {
       return res.status(401).json({
         result: 0,
@@ -50,11 +52,25 @@ export class UserController {
       });
     }
 
-    // TODO: isUse, isDel checking
+    if (isExist.user[0].isUse === "N") {
+      return res.status(401).json({
+        result: 0,
+        message: "Stopped User",
+      });
+    }
+
+    if (isExist.user[0].isDel === "Y") {
+      return res.status(401).json({
+        result: 0,
+        message: "Deleted or Banned User",
+      });
+    }
 
     res.status(200).json({
       result: 1,
       message: "Login Success",
     });
-  }
+  };
+
+  signup = async (req: Request, res: Response) => {};
 }

@@ -1,5 +1,5 @@
 import { IUserResult } from "./../interfaces/user";
-import { UserRepository } from "./../repositories/user.query";
+import { UserRepository } from "../repositories/user.repository";
 import express, { Request, Response } from "express";
 
 const router = express.Router();

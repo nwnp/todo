@@ -1,8 +1,10 @@
-import { UserController } from "../controllers/user/user.controllers";
 import express, { Request, Response } from "express";
+import { UserController } from "../controllers/user/user.controllers";
+import { UserRepository } from "../repositories/user.repository";
 
 const router = express.Router();
+const userController: UserController = new UserController(new UserRepository());
 
-export default function tweetsRouter(UserController: UserController) {
-  router.post("/login", UserController.login);
-}
+router.post("/login", userController.login);
+
+export default router;
