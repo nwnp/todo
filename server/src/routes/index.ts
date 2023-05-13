@@ -1,4 +1,4 @@
-import { IUserResult } from "./../interfaces/user";
+import { IUserResult } from "../interfaces/user.interface";
 import { UserRepository } from "../repositories/user.repository";
 import express, { Request, Response } from "express";
 

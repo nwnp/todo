@@ -1,7 +1,12 @@
 import { Request, Response } from "express";
-import { IUserResult } from "../../interfaces/user";
+import {
+  ICountResult,
+  IResult,
+  IUserResult,
+} from "../../interfaces/user.interface";
 import { UserRepository } from "../../repositories/user.repository";
 import bcrypt from "bcrypt";
+import { RowDataPacket } from "mysql2";
 
 export class UserController {
   constructor(private readonly userRepository: UserRepository) {
@@ -72,5 +77,36 @@ export class UserController {
     });
   };
 
-  signup = async (req: Request, res: Response) => {};
+  signup = async (req: Request, res: Response) => {
+    const { userId, password, email, name, nickname } = req.body;
+
+    if (
+      userId.trim().length === 0 ||
+      password.trim().length === 0 ||
+      email.trim().length === 0 ||
+      name.trim().length === 0 ||
+      nickname.trim().length === 0
+    ) {
+      return res.status(400).json({
+        result: 0,
+        message: "Id or Password or Email or Name is Empty",
+      });
+    }
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        result: 0,
+        message: "Email is Invalid",
+      });
+    }
+
+    const isExist = await this.userRepository.getUserByUserId(userId);
+    if (isExist.count > 0) {
+      return res.status(401).json({
+        result: 0,
+        message: "Exist User",
+      });
+    }
+  };
 }
